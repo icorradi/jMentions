@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jMentions - Mention people like Facebook and Asana</title>
+  <style>
+    #container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 35px;
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+
+    span {
+      color: #6596EF;
+    }
+
+    [contenteditable=true] {
+      font-size: 22px;
+      font-family: serif;
+      padding: 25px;
+      border: 1px solid #E8E8E8;
+      border-radius: 5px;
+    }
+
+    [contenteditable=true]:empty:before{
+      color: #ccc;
+      content: attr(placeholder);
+      display: block;
+    }
+
+    .jmentions-dropdown {
+      border: 1px solid #E8E8E8;
+      position: absolute;
+      min-width: 200px;
+      border-radius: 5px;
+      background: #fff;
+    }
+
+    .jmentions-dropdown div {
+      font-size: 18px;
+      padding: 20px 30px;
+    }
+
+    .jmentions-dropdown div:hover {
+      background: #ccc;
+    }
+
+    button {
+      color: #fff;
+      padding: 20px;
+      border: none;
+      background: #473C8C;
+      margin-top: 10px;
+      min-width: 150px;
+      float: right;
+    }
+
+    .info {
+      margin-top: 100px;
+      margin-bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>jMentions - Mention people like Facebook and Asana</h1>
+    <div class="info">
+      <div>Prefix: <span class="prefix"></span></div><br>
+      <div>Results: <span class="results"></span></div>
+    </div>
+    <div id="editable" class="editable1" contenteditable="true" placeholder="Write here (use @ to mention people ex: @jhon)..."></div>
+    <button id="mention-button">GET RESULTS</button>
+  </div>
+
+  <script src="jquery.min.js"></script>
+  <script src="../src/jMentions.js"></script>
+  <script>
+    $('#editable').jMentions({
+      source: function(prefix) {
+        $('.prefix').text(prefix)
+
+        return $.get('users.json', function(data) {
+          /* [
+               {"value": "jhon", "label": "Jhon"},
+               {"value": "maria", "label": "Maria"},
+               {"value": "alex", "label": "Alex"}
+             ]
+           */
+          return data;
+        })
+      },
+    });
+
+    $('#mention-button').click(function() {
+      $('.results').text($.jMentions.getResults('.editable1'))
+    })
+  </script>
+</body>
+</html>

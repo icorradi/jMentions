@@ -1,0 +1,30 @@
+{
+  "name": "jmentions",
+  "version": "1.0.0",
+  "description": "Mention people like facebook and asana.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icorradi/jMentions.git"
+  },
+  "keywords": [
+    "mentions",
+    "mention",
+    "people",
+    "facebook",
+    "asana"
+  ],
+  "author": "Igor Corradi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/icorradi/jMentions/issues"
+  },
+  "homepage": "https://github.com/icorradi/jMentions#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-minify": "0.0.12"
+  }
+}

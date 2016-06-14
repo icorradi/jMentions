@@ -26,6 +26,7 @@
                           mention[$.jMentions.options.label] + '</div>')
         })
 
+        $('.' + $.jMentions.options.dropdownClass).remove();
         $(elm).after(dropdown);
       }
     }

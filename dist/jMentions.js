@@ -13,49 +13,52 @@
   var regex = /@([A-Za-z]+[_A-Za-z0-9]+)/gi;
 
   $.jMentions = function(elm, options) {
-    function renderDropdown() {
-      var dropdown = $('<div class="' + $.jMentions.options.dropdownClass +
+    function renderDropdown(mentions, dropdownClass) {
+      var dropdown = $('<div class="' + dropdownClass +
                        '"></div>');
 
-      if ($.jMentions.mentions.length) {
-        $.jMentions.mentions.forEach(function(mention) {
-          dropdown.append('<div onclick="$(this).jMentions.addMention(\'' +
-                          mention[$.jMentions.options.value] +
-                          '\')" data-mention="' +
-                          mention[$.jMentions.options.value] + '">' +
-                          mention[$.jMentions.options.label] + '</div>')
-        })
+      if (mentions.length) {
+        $.jMentions.elm = elm;
 
-        $('.' + $.jMentions.options.dropdownClass).remove();
+        mentions.forEach(function(mention) {
+          var value = mention[$.jMentions.elm.data('options').value],
+              label = mention[$.jMentions.elm.data('options').label];
+
+          dropdown.append('<div onclick="$(this).jMentions.addMention(\'' +
+                          value + '\')" data-mention="' + value + '">' +
+                          label + '</div>');
+        });
+
+        $('.' + $.jMentions.elm.data('options').dropdownClass).remove();
         $(elm).after(dropdown);
       }
     }
 
-    $.jMentions = {
-      options: $.extend({
-        dropdownClass: 'jmentions-dropdown',
-        value: 'value',
-        label: 'label',
-        source: function() { return {} }
-      }, options),
-      elm: elm
-    }
+    var _options = $.extend({
+          dropdownClass: 'jmentions-dropdown',
+          value: 'value',
+          label: 'label',
+          source: function() { return {}; }
+        }, options);
+
+    $(elm).data('options', _options);
 
     var textLength;
 
     $.jMentions.getResults = function(selector) {
-      var targets = [];
+      var targets = [],
+          mentions;
 
       if (selector) {
-        var mentions = $(selector).find('span[value]');
+        mentions = $(selector).find('span[value]');
       } else {
-        var mentions = $(elm).find('span[value]');
+        mentions = $(elm).find('span[value]');
       }
 
       if (mentions) {
         for (var i = 0; i < mentions.length; i++) {
           if (targets.indexOf($(mentions[i]).attr('value')) == -1) {
-            targets.push($(mentions[i]).attr('value'))
+            targets.push($(mentions[i]).attr('value'));
           }
         }
       }
@@ -64,56 +67,57 @@
     };
 
     $(elm).keyup(function(e) {
-      $('.' + $.jMentions.options.dropdownClass).remove();
+      $('.' + $(this).data('options').dropdownClass).remove();
 
-      var match = $(elm).text().match(regex);
+      var match = $(this).text().match(regex);
 
       if (match) {
         var len = match[0].length,
+            dropdownClass = $(this).data('options').dropdownClass,
             pureMatch = match[0].slice(1, len);
 
-        if ($.jMentions.options.source(pureMatch).promise) {
-          $.jMentions.options.source(pureMatch).promise().done(function(data) {
+        if ($(this).data('options').source(pureMatch).promise) {
+          $(this).data('options').source(pureMatch).promise().done(function(data) {
+            renderDropdown(data, dropdownClass);
             $.jMentions.mentions = data;
-            renderDropdown();
-          })
+          });
         } else {
-          $.jMentions.mentions = $.jMentions.options.source(pureMatch);
-          renderDropdown();
+          var data = $(this).data('options').source(pureMatch);
+          renderDropdown(data, dropdownClass);
+          $.jMentions.mentions = data;
         }
       } else {
         $.jMentions.mentions = [];
-      };
+      }
 
       var range = window.getSelection().getRangeAt(0);
 
       // delete the mention
-      if (textLength && $(elm).html().length < textLength) {
-        var range = window.getSelection().getRangeAt(0);
+      if (textLength && $(this).html().length < textLength) {
         if (range.commonAncestorContainer.parentNode.tagName == 'SPAN') {
-          $(elm)[0].removeChild(range.commonAncestorContainer.parentNode);
+          $(this)[0].removeChild(range.commonAncestorContainer.parentNode);
         }
       }
 
-      textLength = $(elm).html().length;
+      textLength = $(this).html().length;
     });
   };
 
   $.fn.jMentions = function(options) {
     return $.jMentions(this, options);
-  }
+  };
 
   $.fn.jMentions.addMention = function(person) {
     $.jMentions.mentions.forEach(function(mention) {
-      if (person == mention[$.jMentions.options.value]) {
+      if (person == mention[$.jMentions.elm.data('options').value]) {
         person = mention;
       }
-    })
+    });
 
     var $elm = $($.jMentions.elm),
-        mentionHTML = '&#8203;<span value="'
-        + person[$.jMentions.options.value] + '" disabled>' +
-        person[$.jMentions.options.label] + '</span>&#8203;&nbsp;'
+        mentionHTML = '&#8203;<span value=\"' +
+        person[$.jMentions.elm.data('options').value] + '\" disabled>' +
+        person[$.jMentions.elm.data('options').label] + '</span>&#8203;&nbsp;';
 
     $elm.html($elm.html().replace(regex, mentionHTML));
     $elm.click(); // focus contenteditable
@@ -132,6 +136,6 @@
     tmp.remove();
 
     $.jMentions.mentions = [];
-    $('.' + $.jMentions.options.dropdownClass).remove();
-  }
+    $('.' + $.jMentions.elm.data('options').dropdownClass).remove();
+  };
 }(jQuery));

@@ -6,6 +6,8 @@ Mention people like Facebook and Asana
 ### Example
 [Demo](http://icorradi.github.io/jmentions)
 
+![gif demo](https://github.com/icorradi/jMentions/blob/master/demo.gif "GIF Demo")
+
 ### How to use:
 Add a tag with contenteditable attribute on HTML
 ```html

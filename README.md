@@ -27,9 +27,9 @@ $('#editable').jMentions({
 
     return $.get('users.json', function(data) {
       /* [
-           {"value": "jhon", "label": "Jhon"},
-           {"value": "maria", "label": "Maria"},
-           {"value": "alex", "label": "Alex"}
+           {"value": "jhon", "label": "Jhon", "avatar": "pic.jpg"},
+           {"value": "maria", "label": "Maria", "avatar": "pic.jpg"},
+           {"value": "alex", "label": "Alex", "avatar": "pic.jpg"}
          ]
        */
       return data;
@@ -37,6 +37,7 @@ $('#editable').jMentions({
   },
   value: 'username', // default is 'value'
   label: 'name', // default is 'label'
+  avatar: 'user-pic', // default is 'avatar'
   dropdownClass: 'myDropdown' // default is 'jmentions-dropdown'
 });
 
@@ -49,6 +50,7 @@ $('#results-button').click(function() {
  - **source:** This function receives the prefix and returns a list of matches
  - **value:** Field name to get "value" from data
  - **label:** Field name to get "label" from data
+ - **avatar:** Field name to get "avatar" from data
  - **dropdownClass:** Class name for dropdown
 
 ### License

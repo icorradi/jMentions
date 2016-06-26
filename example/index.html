@@ -9,9 +9,12 @@
       margin: auto;
     }
 
+    #container * {
+      font-family: sans-serif;
+    }
+
     h1 {
       font-size: 35px;
-      font-family: sans-serif;
       font-weight: bold;
     }
 
@@ -43,7 +46,17 @@
 
     .jmentions-dropdown div {
       font-size: 18px;
-      padding: 20px 30px;
+      padding: 20px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .jmentions-dropdown img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      margin-right: 20px;
     }
 
     .jmentions-dropdown div:hover {
@@ -82,18 +95,23 @@
   <script>
     $('#editable').jMentions({
       source: function(prefix) {
+        var dfd = jQuery.Deferred(),
+            filteredUsers = [];
+
         $('.prefix').text(prefix)
 
-        return $.get('users.json', function(data) {
-          /* [
-               {"value": "jhon", "label": "Jhon"},
-               {"value": "maria", "label": "Maria"},
-               {"value": "alex", "label": "Alex"}
-             ]
-           */
-          return data;
+        var users =  $.get('users.json', function(data) {
+          data.forEach(function(elm) {
+            if (elm.value.indexOf(prefix) != -1) {
+              filteredUsers = filteredUsers.concat(elm);
+            }
+          })
+
+          dfd.resolve(filteredUsers);
         })
-      },
+
+        return dfd.promise();
+      }
     });
 
     $('#mention-button').click(function() {

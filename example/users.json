@@ -1,5 +1,5 @@
 [
-  {"value": "jhon", "label": "Jhon"},
-  {"value": "maria", "label": "Maria"},
-  {"value": "alex", "label": "Alex"}
+  {"value": "jhon", "label": "Jhon", "avatar": "https://randomuser.me/api/portraits/men/85.jpg"},
+  {"value": "maria", "label": "Maria", "avatar": "https://randomuser.me/api/portraits/women/43.jpg"},
+  {"value": "alex", "label": "Alex", "avatar": "https://randomuser.me/api/portraits/men/19.jpg"}
 ]

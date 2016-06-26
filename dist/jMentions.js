@@ -22,10 +22,12 @@
 
         mentions.forEach(function(mention) {
           var value = mention[$.jMentions.elm.data('options').value],
-              label = mention[$.jMentions.elm.data('options').label];
+              label = mention[$.jMentions.elm.data('options').label],
+              avatar = mention[$.jMentions.elm.data('options').avatar];
 
           dropdown.append('<div onclick="$(this).jMentions.addMention(\'' +
                           value + '\')" data-mention="' + value + '">' +
+                          '<img src=\"' + avatar + '\" >' +
                           label + '</div>');
         });
 
@@ -38,6 +40,7 @@
           dropdownClass: 'jmentions-dropdown',
           value: 'value',
           label: 'label',
+          avatar: 'avatar',
           source: function() { return {}; }
         }, options);
 

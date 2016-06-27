@@ -15,7 +15,8 @@
     "mention",
     "people",
     "facebook",
-    "asana"
+    "asana",
+    "jquery-plugin"
   ],
   "author": "Igor Corradi",
   "license": "MIT",

@@ -36,6 +36,43 @@
       }
     }
 
+    function captureTextSelection() {
+      if (window.getSelection().anchorNode.parentNode.tagName == 'SPAN') {
+        selectedText.push(window.getSelection().anchorNode.parentNode);
+      }
+
+      if (window.getSelection().focusNode.parentNode.tagName == 'SPAN') {
+        selectedText.push(window.getSelection().focusNode.parentNode);
+      }
+    }
+
+    function removeCursorFromMention() {
+      var target = null;
+
+      if (window.getSelection) {
+        target = window.getSelection().getRangeAt(0).commonAncestorContainer;
+        target = (target.nodeType === 1) ? target : target.parentNode;
+
+        if (target.tagName == 'SPAN') {
+          var tmp = $('<span>').insertAfter(target),
+          textNode = document.createTextNode("\u200b"),
+          node = tmp.get(0),
+          range = null,
+          sel = null;
+
+          range = document.createRange();
+          range.selectNode(node);
+          range.setStartAfter(node);
+          range.insertNode(textNode);
+          range.setStartAfter(textNode);
+          sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          tmp.remove();
+        }
+      }
+    }
+
     var _options = $.extend({
           dropdownClass: 'jmentions-dropdown',
           value: 'value',
@@ -46,7 +83,8 @@
 
     $(elm).data('options', _options);
 
-    var textLength;
+    var textLength,
+        selectedText = [];
 
     $.jMentions.getResults = function(selector) {
       var targets = [],
@@ -102,7 +140,31 @@
         }
       }
 
+      if (window.getSelection().toString()) {
+        captureTextSelection();
+      } else {
+        removeCursorFromMention();
+      }
+
       textLength = $(this).html().length;
+    });
+
+    $(elm).keydown(function(e) {
+      if(selectedText.length) {
+        for (var i = 0; i < selectedText.length; i++) {
+          $(this)[0].removeChild(selectedText[i]);
+        }
+      }
+
+      selectedText = [];
+    });
+
+    $(elm).mouseup(function(e) {
+      if (window.getSelection().toString()) {
+        captureTextSelection();
+      } else {
+        removeCursorFromMention();
+      }
     });
   };
 
@@ -119,7 +181,7 @@
 
     var $elm = $($.jMentions.elm),
         mentionHTML = '&#8203;<span value=\"' +
-        person[$.jMentions.elm.data('options').value] + '\" disabled>' +
+        person[$.jMentions.elm.data('options').value] + '\">' +
         person[$.jMentions.elm.data('options').label] + '</span>&#8203;&nbsp;';
 
     $elm.html($elm.html().replace(regex, mentionHTML));

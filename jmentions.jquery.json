@@ -1,0 +1,27 @@
+{
+    "name": "jmentions",
+    "version": "1.0.0",
+    "title": "JMentions",
+    "author": {
+        "name": "Igor Corradi",
+        "email": "igorcorradi.dev@gmail.com"
+    },
+    "licenses": [{
+        "type": "MIT",
+        "url": "http://opensource.org/licenses/MIT"
+    }],
+    "dependencies": {
+      "jquery": "~2.1.1"
+    },
+    "description": "Mention people like facebook and asana.",
+    "keywords": [
+      "mentions",
+      "people",
+      "name",
+      "mention",
+      "facebook",
+      "asana",
+      "jquery"
+    ],
+    "demo": "http://icorradi.github.io/jmentions/"
+}
